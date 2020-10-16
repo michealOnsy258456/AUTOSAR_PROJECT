@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;SW_Layered_Project/Dio_PBcfg.c&apos; to &apos;Port_PBcfg.c&apos;" description="Rename resource &apos;Dio_PBcfg.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Dio_PBcfg.c" name="Port_PBcfg.c" stamp="1583271075774" updateReferences="true"/>
+</session>

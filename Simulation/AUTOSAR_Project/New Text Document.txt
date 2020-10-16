@@ -1,0 +1,69 @@
+void Port_Init( const Port_ConfigType* ConfigPtr)
+{
+	uint8 *DDR_ptr;
+	uint8 *port_ptr;
+#if (PORT_DEV_ERROR_DETECT == STD_ON)
+	/* check if the input configuration pointer is not a NULL_PTR */
+	if (NULL_PTR == ConfigPtr)
+	{
+		Det_ReportError(PORT_MODULE_ID, PORT_INSTANCE_ID, PORT_INIT_SID,
+				PORT_E_PARAM_CONFIG);
+	}
+	else
+	{
+		port_PortChannels = ConfigPtr->Ports;
+		for (int i = 0; i < PORT_CONFIGURED_CHANNLES; i++) {
+			/*get port */
+			switch (port_PortChannels[i].port) {
+			case PORTA: DDR_ptr  = &DDRA_REG;
+			port_ptr = &PORTA_REG;
+			break;
+			case PORTB: DDR_ptr  = &DDRB_REG;
+			port_ptr = &PORTB_REG;
+			break;
+			case PORTC: DDR_ptr  = &DDRC_REG;
+			port_ptr = &PORTC_REG;
+			break;
+			case PORTD: DDR_ptr  = &DDRD_REG;
+			port_ptr = &PORTD_REG;
+			break;
+			}
+			if(PORT_PIN_IN==port_PortChannels[i].direction)
+			{
+				CLEAR_BIT(*DDR_ptr,port_PortChannels[i].pin_num);
+				if (Disable_Pull_up == port_PortChannels[i].pin_in_mode)
+				{
+					CLEAR_BIT(*port_ptr, port_PortChannels[i].pin_num);
+				}
+				else if(Enable_Pull_up== port_PortChannels[i].pin_in_mode)
+				{
+					SET_BIT(*port_ptr, port_PortChannels[i].pin_num);
+				}
+				else
+				{
+				}
+			}
+			else if(PORT_PIN_OUT==port_PortChannels[i].direction)
+			{
+				SET_BIT(*DDR_ptr,port_PortChannels[i].pin_num);
+				if (initial_Low==port_PortChannels[i].pin_out_mode)
+				{
+					CLEAR_BIT(*port_ptr,port_PortChannels[i].pin_num);
+				}
+				else if (initial_High==port_PortChannels[i].pin_out_mode)
+				{
+					SET_BIT(*port_ptr,port_PortChannels[i].pin_num);
+				}
+				else
+				{
+				}
+			}
+			else
+			{
+			}
+
+		}
+		Port_Status = PORT_INITIALIZED;
+	}
+#endif
+}
